@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #0f1115;
+  --color-brand-surface: #1a1d23;
+  --color-brand-sidebar: #14171c;
+  --color-brand-red: #ef4444;
+  --color-felt-top: #1b4332;
+  --color-felt-bottom: #081c15;
+}
+
+:root {
+  --background: #0f1115;
+  --foreground: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.poker-table-gradient {
+  background: radial-gradient(circle at center, var(--color-felt-top), var(--color-felt-bottom));
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
