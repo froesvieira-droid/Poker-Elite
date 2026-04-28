@@ -12,8 +12,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: 'StarPoker - Elite Experience',
-  description: 'The most refined poker experience on the web.',
+  title: 'StarPoker - Experiência Elite',
+  description: 'A mais refinada experiência de poker na web.',
 };
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-brand-bg text-white">
         {children}
       </body>

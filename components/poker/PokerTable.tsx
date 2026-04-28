@@ -22,7 +22,7 @@ export const PokerTable = ({ state, currentPlayerId }: { state: GameState, curre
         {/* Pot and Cards */}
         <div className="relative z-10 flex flex-col items-center gap-6">
           <div className="text-center group">
-            <p className="text-[10px] text-white/30 font-black tracking-[0.2em] uppercase mb-1">TOTAL POT</p>
+            <p className="text-[10px] text-white/30 font-black tracking-[0.2em] uppercase mb-1">POTE TOTAL</p>
             <motion.p 
               key={state.pot}
               initial={{ scale: 0.8, opacity: 0 }}

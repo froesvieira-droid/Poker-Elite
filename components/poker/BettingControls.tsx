@@ -45,20 +45,20 @@ export const BettingControls = ({
           onClick={() => onAction({ type: 'call' })}
           className="w-36 h-16 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-display font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-600/20"
         >
-          {state.currentBet > player.bet ? `Call $${(state.currentBet - player.bet).toLocaleString()}` : 'Check'}
+          {state.currentBet > player.bet ? `Pagar $${(state.currentBet - player.bet).toLocaleString()}` : 'Mesa'}
         </button>
         <button 
           onClick={() => onAction({ type: 'raise', amount: betAmount })}
           className="w-36 h-16 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-display font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-600/20"
         >
-          Raise to ${betAmount.toLocaleString()}
+          Aumentar para ${betAmount.toLocaleString()}
         </button>
       </div>
 
       {/* Bet Slider Control */}
       <div className="flex-1 flex flex-col gap-4 max-w-2xl px-8 border-l border-white/5">
         <div className="flex justify-between text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
-          <span>Min: ${minRaise}</span>
+          <span>Mín: ${minRaise}</span>
           <span className="text-white">${betAmount.toLocaleString()}</span>
           <span>All-In: ${maxRaise.toLocaleString()}</span>
         </div>
@@ -96,7 +96,7 @@ export const BettingControls = ({
             onClick={() => setBetAmount(Math.min(maxRaise, state.pot * mult))}
             className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black tracking-widest text-white/60 hover:text-white transition-all uppercase border border-white/5"
           >
-            {mult === 1 ? 'POT' : `${mult} POT`}
+            {mult === 1 ? 'POTE' : `${mult} POTE`}
           </button>
         ))}
         <button 

@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
   const cards = [
-    { title: 'OFFLINE MODE', desc: 'Sharpen your skills against elite AI opponents.', icon: Laptop, color: 'border-white/10', link: '/play/offline' },
-    { title: 'MULTIPLAYER', desc: 'Join high-stakes tables with players worldwide.', icon: Users, color: 'border-red-500/50', link: '/play/online' },
-    { title: 'TOURNAMENTS', desc: 'Compete in global events for massive prizes.', icon: Trophy, color: 'border-white/10', link: '/tournaments' },
-    { title: 'RESOURCES', desc: 'Advanced statistics and hand history analysis.', icon: Medal, color: 'border-white/10', link: '/stats' },
+    { title: 'MODO OFFLINE', desc: 'Aprimore suas habilidades contra oponentes de IA elite.', icon: Laptop, color: 'border-white/10', link: '/play/offline' },
+    { title: 'MULTIPLAYER', desc: 'Junte-se a mesas de apostas altas com jogadores do mundo todo.', icon: Users, color: 'border-red-500/50', link: '/play/online' },
+    { title: 'TORNEIOS', desc: 'Compita em eventos globais por prêmios massivos.', icon: Trophy, color: 'border-white/10', link: '/tournaments' },
+    { title: 'RECURSOS', desc: 'Estatísticas avançadas e análise de histórico de mãos.', icon: Medal, color: 'border-white/10', link: '/stats' },
   ];
 
   return (
@@ -27,8 +27,8 @@ export default function LandingPage() {
              </span>
           </div>
           <div className="hidden md:flex gap-8 text-[11px] font-black tracking-widest text-white/40">
-             <Link href="/play" className="text-white hover:text-white transition-colors">PLAY NOW</Link>
-             <Link href="/tournaments" className="hover:text-white transition-colors">TOURNAMENTS</Link>
+             <Link href="/play" className="text-white hover:text-white transition-colors">JOGAR AGORA</Link>
+             <Link href="/tournaments" className="hover:text-white transition-colors">TORNEIOS</Link>
              <Link href="/ranking" className="hover:text-white transition-colors">RANKINGS</Link>
           </div>
         </div>
@@ -56,14 +56,14 @@ export default function LandingPage() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-[10px] font-black tracking-[0.2em] mb-6">
               <Sparkles size={12} />
-              THE ELITE GAMING EXPERIENCE
+              A ELITE DA EXPERIÊNCIA GAMING
             </div>
             <h1 className="text-7xl md:text-8xl font-display font-black italic tracking-tighter leading-[0.85] uppercase mb-8">
-              WHERE LEGENDS <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-400 to-white">ARE FORGED.</span>
+              ONDE LENDAS <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-400 to-white">SÃO FORJADAS.</span>
             </h1>
             <p className="text-lg text-white/40 max-w-md font-medium mb-12">
-              Experience the world's most refined poker interface. Real-time multiplayer, advanced AI training, and the highest stakes on the web.
+              Conheça a interface de poker mais refinada do mundo. Multiplayer em tempo real, treinamento com IA avançada e as maiores apostas da web.
             </p>
             
             <div className="flex flex-wrap gap-6">
@@ -73,14 +73,14 @@ export default function LandingPage() {
               >
                 <div className="flex items-center gap-3">
                   <Play size={20} className="fill-current" />
-                  <span>PLAY NOW</span>
+                  <span>JOGAR AGORA</span>
                 </div>
               </Link>
               <Link
                 href="/play/offline"
                 className="px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black rounded-2xl transition-all"
               >
-                TRAIN OFFLINE
+                TREINAR OFFLINE
               </Link>
             </div>
           </motion.div>
@@ -96,7 +96,7 @@ export default function LandingPage() {
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-brand-surface rounded-[40px] border border-white/10 shadow-2xl p-8 rotate-3">
                   <div className="w-full h-full poker-table-gradient rounded-[20px] border-4 border-[#2c2c2c] flex items-center justify-center">
                     <div className="text-center">
-                      <p className="text-[10px] text-white/20 uppercase font-black tracking-widest mb-1">TOTAL POT</p>
+                      <p className="text-[10px] text-white/20 uppercase font-black tracking-widest mb-1">POTE TOTAL</p>
                       <p className="text-4xl font-black text-yellow-500 font-display">$1,240,500</p>
                     </div>
                   </div>
@@ -133,7 +133,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-display font-black tracking-tight mb-3 uppercase italic">{card.title}</h3>
                 <p className="text-white/40 text-sm font-medium leading-relaxed mb-8">{card.desc}</p>
                 <div className="flex items-center gap-2 text-xs font-black tracking-widest text-red-500 group-hover:gap-4 transition-all">
-                  ENTER <ChevronRight size={14} />
+                  ENTRAR <ChevronRight size={14} />
                 </div>
               </motion.div>
             </Link>
