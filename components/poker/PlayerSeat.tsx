@@ -22,11 +22,12 @@ export const PlayerSeat = ({
   tableDimensions: { width: number, height: number }
 }) => {
   // Ellipse positioning relative to table dimensions
-  const angle = (index * (360 / totalPlayers)) * (Math.PI / 180);
+  // Offset by 180 degrees to put index 0 (Hero) at the bottom
+  const angle = ((index * (360 / totalPlayers)) + 180) * (Math.PI / 180);
   
   // Use responsive radius: roughly 85-90% of half-width/half-height to stay inside the table area
   const rx = tableDimensions.width * 0.42; 
-  const ry = tableDimensions.height * 0.42;
+  const ry = tableDimensions.height * 0.40; // Slightly less vertical radius to keep seats further from center
   
   const x = Math.sin(angle) * rx;
   const y = -Math.cos(angle) * ry;
@@ -106,8 +107,8 @@ export const PlayerSeat = ({
            </div>
         )}
 
-        {/* Card Display */}
-        {!isFolded && player.cards.length > 0 && (
+        {/* Card Display - Only for opponents or if not hero */}
+        {!isFolded && player.cards.length > 0 && !isHero && (
            <div className="flex gap-0.5 sm:gap-1 mt-1 sm:mt-2">
              {player.cards.map((card, i) => (
                <motion.div 
