@@ -73,13 +73,13 @@ export default function OfflinePlayPage() {
   return (
     <main className="min-h-screen bg-brand-bg flex flex-col overflow-hidden relative">
       {/* HUD Header */}
-      <nav className="h-20 bg-brand-surface border-b border-white/5 flex items-center justify-between px-10 relative z-50">
-        <div className="flex items-center gap-10">
-          <Link href="/" className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-gradient-to-tr from-red-600 to-red-400 rounded-xl flex items-center justify-center rotate-45 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-               <span className="font-black text-sm -rotate-45">♠</span>
+      <nav className="h-16 md:h-20 bg-brand-surface border-b border-white/5 flex items-center justify-between px-4 md:px-10 relative z-50">
+        <div className="flex items-center gap-4 md:gap-10">
+          <Link href="/" className="flex items-center gap-2 md:gap-3">
+             <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-tr from-red-600 to-red-400 rounded-lg md:rounded-xl flex items-center justify-center rotate-45 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+               <span className="font-black text-xs md:text-sm -rotate-45">♠</span>
              </div>
-             <span className="font-display font-black text-2xl tracking-tighter uppercase">
+             <span className="font-display font-black text-xl md:text-2xl tracking-tighter uppercase whitespace-nowrap">
                STAR<span className="text-red-500">POKER</span>
              </span>
           </Link>
@@ -158,7 +158,7 @@ export default function OfflinePlayPage() {
         </aside>
 
         {/* Center: The Table */}
-        <div className="flex-1 relative flex items-center justify-center p-10 bg-brand-surface overflow-hidden">
+        <div className="flex-1 relative flex items-center justify-center p-2 sm:p-10 bg-brand-surface overflow-hidden">
            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,68,68,0.03)_0%,transparent_50%)] pointer-events-none" />
            <PokerTable state={gameState} currentPlayerId="hero" />
         </div>

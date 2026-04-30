@@ -6,8 +6,27 @@ export enum Suit {
 }
 
 export enum CardRank {
-  Two = '2', Three = '3', Four = '4', Five = '5', Six = '6', Seven = '7', Eight = '8', Nine = '9', Ten = 'T',
-  Jack = 'J', Queen = 'Q', King = 'K', Ace = 'A'
+  Two = 2, Three = 3, Four = 4, Five = 5, Six = 6, Seven = 7, Eight = 8, Nine = 9, Ten = 10,
+  Jack = 11, Queen = 12, King = 13, Ace = 14
+}
+
+export enum HandRank {
+  HighCard = 0,
+  Pair = 1,
+  TwoPair = 2,
+  ThreeOfAKind = 3,
+  Straight = 4,
+  Flush = 5,
+  FullHouse = 6,
+  FourOfAKind = 7,
+  StraightFlush = 8,
+  RoyalFlush = 9
+}
+
+export interface HandEvaluation {
+  rank: HandRank;
+  score: number;
+  cards: Card[];
 }
 
 export interface Card {

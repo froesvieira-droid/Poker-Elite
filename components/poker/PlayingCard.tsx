@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import { Card, Suit } from '@/lib/poker/types';
 import { cn } from '@/lib/utils';
+import { getRankLabel } from '@/lib/poker/utils';
 
 interface PlayingCardProps {
   card?: Card; // If undefined, show back
@@ -22,12 +23,6 @@ export const PlayingCard = ({ card, className, isFolded }: PlayingCardProps) => 
 
   const getSuitColor = (suit: Suit) => {
     return (suit === Suit.Hearts || suit === Suit.Diamonds) ? 'text-red-500' : 'text-slate-900';
-  };
-
-  const getRankLabel = (rank: number) => {
-    if (rank <= 10) return rank.toString();
-    const map: { [key: number]: string } = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' };
-    return map[rank];
   };
 
   if (!card) {

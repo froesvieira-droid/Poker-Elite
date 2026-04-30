@@ -1,11 +1,11 @@
-import { Card, Rank, Suit, HandRank, HandEvaluation } from './types';
+import { Card, CardRank, Suit, HandRank, HandEvaluation } from './types';
 
 export const createDeck = (): Card[] => {
   const deck: Card[] = [];
   const suits = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades];
   const ranks = [
-    Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven,
-    Rank.Eight, Rank.Nine, Rank.Ten, Rank.Jack, Rank.Queen, Rank.King, Rank.Ace
+    CardRank.Two, CardRank.Three, CardRank.Four, CardRank.Five, CardRank.Six, CardRank.Seven,
+    CardRank.Eight, CardRank.Nine, CardRank.Ten, CardRank.Jack, CardRank.Queen, CardRank.King, CardRank.Ace
   ];
 
   for (const suit of suits) {
@@ -31,6 +31,14 @@ export const cardToString = (card: Card): string => {
   };
   const r = rankNames[card.rank] || card.rank.toString();
   return `${r}${card.suit}`;
+};
+
+export const getRankLabel = (rank: CardRank): string => {
+  if (rank <= 10) return rank.toString();
+  const map: { [key: number]: string } = {
+    11: 'J', 12: 'Q', 13: 'K', 14: 'A'
+  };
+  return map[rank] || rank.toString();
 };
 
 export const evaluateHand = (cards: Card[]): HandEvaluation => {
@@ -73,7 +81,7 @@ const evaluateFiveCards = (cards: Card[]): HandEvaluation => {
   
   const isFlush = suits.every(s => s === suits[0]);
   const isStraight = ranks.every((r, i) => i === 0 || r === ranks[i - 1] - 1) || 
-                     (ranks[0] === Rank.Ace && ranks[1] === 5 && ranks[2] === 4 && ranks[3] === 3 && ranks[4] === 2); // Ace low straight
+                     (ranks[0] === CardRank.Ace && ranks[1] === 5 && ranks[2] === 4 && ranks[3] === 3 && ranks[4] === 2); // Ace low straight
 
   const counts: { [key: number]: number } = {};
   ranks.forEach(r => counts[r] = (counts[r] || 0) + 1);
@@ -89,7 +97,7 @@ const evaluateFiveCards = (cards: Card[]): HandEvaluation => {
   // Calculate a base score for tie-breaking: sum of ranks weighted by significance
   const calcScore = (r: number[]) => r.reduce((acc, val, i) => acc + val * Math.pow(15, 4 - i), 0);
 
-  if (isFlush && isStraight && ranks[0] === Rank.Ace && ranks[1] === Rank.King) {
+  if (isFlush && isStraight && ranks[0] === CardRank.Ace && ranks[1] === CardRank.King) {
     rank = HandRank.RoyalFlush;
   } else if (isFlush && isStraight) {
     rank = HandRank.StraightFlush;
@@ -113,7 +121,7 @@ const evaluateFiveCards = (cards: Card[]): HandEvaluation => {
 
   score = calcScore(countRanks);
   // Special case for Ace-low straight
-  if (isStraight && ranks[0] === Rank.Ace && ranks[1] === 5) {
+  if (isStraight && ranks[0] === CardRank.Ace && ranks[1] === 5) {
      score = calcScore([5, 4, 3, 2, 14]); 
   }
 

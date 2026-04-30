@@ -2,7 +2,7 @@ import { Card, CardRank, GameStage, GameState, Player, PlayerStatus, Suit } from
 
 export function createDeck(): Card[] {
   const suits = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades];
-  const ranks = Object.values(CardRank);
+  const ranks = Object.values(CardRank).filter(v => typeof v === 'number') as CardRank[];
   const deck: Card[] = [];
   for (const suit of suits) {
     for (const rank of ranks) {

@@ -1,4 +1,5 @@
-import { Card, GameStage, GameState, Player, PlayerStatus } from './types';
+import { Card, CardRank, GameStage, GameState, Player, PlayerStatus } from './types';
+import { getRankLabel } from './utils';
 // @ts-ignore
 import { Hand } from 'pokersolver';
 
@@ -18,7 +19,9 @@ interface AiAction {
  */
 function toSolverFormat(card: Card): string {
   const suitMap: Record<string, string> = { 'H': 'h', 'D': 'd', 'C': 'c', 'S': 's' };
-  return `${card.rank}${suitMap[card.suit]}`;
+  let rankStr = getRankLabel(card.rank);
+  if (rankStr === '10') rankStr = 'T';
+  return `${rankStr}${suitMap[card.suit]}`;
 }
 
 /**
@@ -33,9 +36,10 @@ function evaluateHandStrength(cards: Card[], communityCards: Card[]): number {
        const r1 = cards[0].rank;
        const r2 = cards[1].rank;
        const isPairPkt = r1 === r2;
-       const highCard = ['A', 'K', 'Q', 'J', 'T'].includes(r1) || ['A', 'K', 'Q', 'J', 'T'].includes(r2);
+       // Numeric ranks: T=10, J=11, Q=12, K=13, A=14
+       const highCard = r1 >= 10 || r2 >= 10;
        
-       if (isPairPkt) return 0.7 + (ranks.indexOf(r1) / 20);
+       if (isPairPkt) return 0.7 + (r1 / 20);
        if (highCard) return 0.5;
        return 0.3;
     }
@@ -64,7 +68,7 @@ function evaluateHandStrength(cards: Card[], communityCards: Card[]): number {
   }
 }
 
-const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 export function getAiAction(state: GameState, playerIdx: number, difficulty: Difficulty = Difficulty.Medium): AiAction {
   const player = state.players[playerIdx];

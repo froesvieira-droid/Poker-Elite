@@ -58,7 +58,7 @@ export default function LandingPage() {
               <Sparkles size={12} />
               A ELITE DA EXPERIÊNCIA GAMING
             </div>
-            <h1 className="text-7xl md:text-8xl font-display font-black italic tracking-tighter leading-[0.85] uppercase mb-8">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-display font-black italic tracking-tighter leading-[0.85] uppercase mb-8">
               ONDE LENDAS <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-400 to-white">SÃO FORJADAS.</span>
             </h1>
