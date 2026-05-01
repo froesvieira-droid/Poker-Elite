@@ -7,7 +7,7 @@ import { getAiAction, Difficulty } from '@/lib/poker/ai';
 import { PokerTable } from '@/components/poker/PokerTable';
 import { BettingControls } from '@/components/poker/BettingControls';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, Trophy, Settings, RefreshCw, ChevronLeft } from 'lucide-react';
+import { Home, Trophy, Settings, RefreshCw, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
@@ -17,21 +17,24 @@ import { AvatarSelection } from '@/components/poker/AvatarSelection';
 import { X } from 'lucide-react';
 
 const INITIAL_PLAYERS: Player[] = [
-  { id: 'hero', name: 'Hero', avatar: POKER_AVATARS[0].url, chips: 10000, status: PlayerStatus.Playing, isDealer: true, cards: [], bet: 0 },
-  { id: 'cpu1', name: 'Shark_AI', avatar: POKER_AVATARS[1].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0 },
-  { id: 'cpu2', name: 'Bluff_Bot', avatar: POKER_AVATARS[2].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0 },
-  { id: 'cpu3', name: 'Pro_CPU', avatar: POKER_AVATARS[3].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0 },
+  { id: 'hero', name: 'Hero', avatar: POKER_AVATARS[0].url, chips: 10000, status: PlayerStatus.Playing, isDealer: true, cards: [], bet: 0, raisesThisRound: 0 },
+  { id: 'cpu1', name: 'Shark_AI', avatar: POKER_AVATARS[1].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0, raisesThisRound: 0 },
+  { id: 'cpu2', name: 'Bluff_Bot', avatar: POKER_AVATARS[2].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0, raisesThisRound: 0 },
+  { id: 'cpu3', name: 'Pro_CPU', avatar: POKER_AVATARS[3].url, chips: 10000, status: PlayerStatus.Playing, isDealer: false, cards: [], bet: 0, raisesThisRound: 0 },
 ];
 
 export default function OfflinePlayPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
-  useEffect(() => {
+  const startGame = (level: Difficulty) => {
+    setDifficulty(level);
     const state = createInitialState(INITIAL_PLAYERS);
     setGameState(startHand(state));
-  }, []);
+    setGameStarted(true);
+  };
 
   const changeHeroAvatar = (url: string) => {
     if (!gameState) return;
@@ -68,6 +71,60 @@ export default function OfflinePlayPage() {
     setGameState(startHand(gameState));
   };
 
+  if (!gameStarted) {
+    return (
+      <main className="min-h-screen bg-brand-bg flex flex-col items-center justify-center p-6 bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.1)_0%,transparent_100%)]">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-4xl text-center"
+        >
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full mb-8">
+            <Sparkles size={14} className="text-red-500" />
+            <span className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase">MODO TREINAMENTO ELITE</span>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl font-display font-black italic tracking-tighter uppercase mb-6 leading-none">
+            ESCOLHA SEU <span className="text-red-500">NÍVEL</span>
+          </h1>
+          <p className="text-white/40 max-w-xl mx-auto mb-16 font-medium">
+            Enfrente nossa IA adaptativa em três níveis de intensidade. Aprimore sua leitura de mesa antes de entrar nas arenas globais.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { level: Difficulty.Easy, label: 'INICIANTE', desc: 'Ideal para aprender as mecânicas. IA menos agressiva.', icon: '🔰' },
+              { level: Difficulty.Medium, label: 'ESPECIALISTA', desc: 'Oponentes balanceados com estratégias reais.', icon: '⚡' },
+              { level: Difficulty.Hard, label: 'PRO', desc: 'IA elite. Bluffs frequentes e decisões matemáticas.', icon: '💎' },
+            ].map((item) => (
+              <motion.button
+                key={item.level}
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => startGame(item.level)}
+                className="group relative bg-brand-surface border border-white/5 p-8 rounded-[32px] text-left hover:border-red-500/50 transition-all shadow-2xl overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:via-red-500/50 transition-all" />
+                <div className="text-4xl mb-6">{item.icon}</div>
+                <h3 className="text-2xl font-display font-black italic tracking-tight mb-2 uppercase group-hover:text-red-500 transition-colors">{item.label}</h3>
+                <p className="text-xs text-white/40 leading-relaxed font-medium">{item.desc}</p>
+                <div className="mt-8 flex items-center gap-2 text-[10px] font-black text-white/20 group-hover:text-red-500/50 tracking-widest uppercase transition-colors">
+                  <span>Selecionar Nível</span>
+                  <ChevronRight size={12} />
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          <Link href="/" className="inline-flex items-center gap-2 mt-16 text-white/30 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+            <ChevronLeft size={16} />
+            Voltar ao Início
+          </Link>
+        </motion.div>
+      </main>
+    );
+  }
+
   if (!gameState) return null;
 
   return (
@@ -96,11 +153,10 @@ export default function OfflinePlayPage() {
                        difficulty === d ? "text-red-500 underline underline-offset-4" : "text-white/40"
                      )}
                    >
-                     {d === 'easy' ? 'FÁCIL' : d === 'medium' ? 'MÉDIO' : 'DIFÍCIL'}
+                     {d === 'easy' ? 'INICIANTE' : d === 'medium' ? 'ESPECIALISTA' : 'PRO'}
                    </button>
                 ))}
              </div>
-             <span className="hover:text-white transition-colors cursor-pointer py-7">STATS</span>
           </div>
         </div>
         
@@ -125,34 +181,33 @@ export default function OfflinePlayPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
-        <aside className="w-72 bg-brand-sidebar border-r border-white/5 p-6 flex flex-col gap-6 shrink-0 hidden xl:flex">
+        <aside className="w-72 bg-brand-sidebar border-r border-white/5 p-6 flex flex-col gap-8 shrink-0 hidden xl:flex">
           <div className="space-y-4">
-            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Torneio Ativo</h3>
-            <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-4">
-               <p className="text-[10px] text-red-500 font-black tracking-widest mb-1 italic">GRAND SLAM ELITE</p>
-               <p className="text-xl font-display font-black tracking-tight">$50,000 GTD</p>
-               <div className="mt-4 flex justify-between text-[11px] font-bold text-white/40">
-                  <span>Jogadores: 124/500</span>
-                  <span>Blinds: 200/400</span>
+            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Destaques da Temporada</h3>
+            <div className="bg-brand-surface border border-white/10 rounded-2xl p-5 shadow-2xl relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-full h-1 bg-red-600" />
+               <p className="text-[10px] text-red-500 font-black tracking-widest mb-2 italic">MISSÃO DO DIA</p>
+               <p className="text-lg font-display font-black tracking-tight leading-none mb-4">Vencer 10 mãos com um par de Áses</p>
+               <div className="flex items-center justify-between">
+                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <div className="w-1/3 h-full bg-white/20" />
+                  </div>
+                  <span className="ml-3 text-[10px] font-black text-white/40 italic">3/10</span>
                </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Ranking Global</h3>
+          <div className="space-y-4 mt-auto">
+            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Status do Jogador</h3>
             <div className="flex flex-col gap-2">
-               {[
-                 { rank: '01', name: 'Ace_Hunter', chips: '1.2M', color: 'text-yellow-500' },
-                 { rank: '02', name: 'BluffMaster', chips: '980K', color: 'text-white/40' },
-                 { rank: '03', name: 'RiverRat99', chips: '845K', color: 'text-red-600' },
-               ].map((r, i) => (
-                 <div key={i} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                    <span className={cn("text-xs font-black", r.color)}>{r.rank}</span>
-                    <div className="w-7 h-7 rounded bg-slate-700" />
-                    <span className="text-[11px] font-bold text-white/80">{r.name}</span>
-                    <span className="ml-auto text-[10px] font-black text-white/30">{r.chips}</span>
-                 </div>
-               ))}
+               <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                  <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Nível Elite</span>
+                  <span className="text-[11px] font-black text-white">LVL 42</span>
+               </div>
+               <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                  <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Total Ganhos</span>
+                  <span className="text-[11px] font-black text-yellow-500">$2.4M</span>
+               </div>
             </div>
           </div>
         </aside>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Swords, Trophy, Users, Laptop, ChevronRight, Play, Medal, Sparkles } from 'lucide-react';
+import { Swords, Trophy, Users, Laptop, ChevronRight, Play, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -9,8 +9,6 @@ export default function LandingPage() {
   const cards = [
     { title: 'MODO OFFLINE', desc: 'Aprimore suas habilidades contra oponentes de IA elite.', icon: Laptop, color: 'border-white/10', link: '/play/offline' },
     { title: 'MULTIPLAYER', desc: 'Junte-se a mesas de apostas altas com jogadores do mundo todo.', icon: Users, color: 'border-red-500/50', link: '/play/online' },
-    { title: 'TORNEIOS', desc: 'Compita em eventos globais por prêmios massivos.', icon: Trophy, color: 'border-white/10', link: '/tournaments' },
-    { title: 'RECURSOS', desc: 'Estatísticas avançadas e análise de histórico de mãos.', icon: Medal, color: 'border-white/10', link: '/stats' },
   ];
 
   return (
@@ -27,9 +25,6 @@ export default function LandingPage() {
              </span>
           </div>
           <div className="hidden md:flex gap-8 text-[11px] font-black tracking-widest text-white/40">
-             <Link href="/play" className="text-white hover:text-white transition-colors">JOGAR AGORA</Link>
-             <Link href="/tournaments" className="hover:text-white transition-colors">TORNEIOS</Link>
-             <Link href="/ranking" className="hover:text-white transition-colors">RANKINGS</Link>
           </div>
         </div>
         
@@ -73,14 +68,14 @@ export default function LandingPage() {
               >
                 <div className="flex items-center gap-3">
                   <Play size={20} className="fill-current" />
-                  <span>JOGAR AGORA</span>
+                  <span>MULTIPLAYER</span>
                 </div>
               </Link>
               <Link
                 href="/play/offline"
                 className="px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black rounded-2xl transition-all"
               >
-                TREINAR OFFLINE
+                JOGAR OFFLINE
               </Link>
             </div>
           </motion.div>

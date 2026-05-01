@@ -44,7 +44,8 @@ export default function OnlineRoomPage({ params }: { params: Promise<{ roomId: s
           status: 'waiting',
           isDealer: false,
           cards: [],
-          bet: 0
+          bet: 0,
+          raisesThisRound: 0
         }
       };
       

@@ -52,6 +52,7 @@ export interface Player {
   cards: Card[];
   bet: number;
   lastAction?: string;
+  raisesThisRound: number;
 }
 
 export enum GameStage {

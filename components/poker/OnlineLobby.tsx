@@ -46,7 +46,8 @@ export const OnlineLobby = () => {
             status: 'waiting',
             isDealer: false,
             cards: [],
-            bet: 0
+            bet: 0,
+            raisesThisRound: 0
           }
         },
         gameState: null,

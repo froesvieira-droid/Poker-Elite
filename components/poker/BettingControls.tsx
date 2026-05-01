@@ -5,6 +5,7 @@ import { GameState, GameStage, PlayerStatus } from '@/lib/poker/types';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { getRankLabel } from '@/lib/poker/utils';
+import { MAX_RAISES } from '@/lib/poker/engine';
 
 const getSuitSymbol = (suit: string) => {
   switch (suit) {
@@ -29,8 +30,8 @@ export const BettingControls = ({
   const player = state.players.find(p => p.id === playerId);
   const isMyTurn = state.players[state.actingIndex]?.id === playerId && state.stage !== GameStage.Showdown;
 
-  const minRaise = state.currentBet * 2;
-  const maxRaise = player?.chips || 0;
+  const minRaise = state.currentBet === 0 ? 20 : state.currentBet * 2;
+  const maxRaise = (player?.chips || 0) + (player?.bet || 0);
 
   useEffect(() => {
     setBetAmount(Math.min(minRaise, maxRaise));
@@ -97,16 +98,25 @@ export const BettingControls = ({
             </button>
             <button 
               onClick={() => onAction({ type: 'raise', amount: betAmount })}
-              className="flex-1 md:w-36 h-12 md:h-16 rounded-xl md:rounded-2xl bg-red-600 hover:bg-red-500 text-white font-display font-black text-xs md:text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-600/20"
+              disabled={player.raisesThisRound >= MAX_RAISES}
+              className={cn(
+                "flex-1 md:w-36 h-12 md:h-16 rounded-xl md:rounded-2xl font-display font-black text-xs md:text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg",
+                player.raisesThisRound >= MAX_RAISES 
+                  ? "bg-slate-800 text-white/20 cursor-not-allowed border border-white/5 shadow-none" 
+                  : "bg-red-600 hover:bg-red-500 text-white shadow-red-600/20"
+              )}
             >
-              {betAmount === maxRaise ? 'ALL-IN' : `Aum. $${betAmount.toLocaleString()}`}
+              {player.raisesThisRound >= MAX_RAISES ? 'Limite Aum.' : (betAmount === maxRaise ? 'ALL-IN' : `Aum. $${betAmount.toLocaleString()}`)}
             </button>
           </div>
 
           {/* Bet Slider Control */}
-          <div className="flex-1 flex flex-col gap-2 md:gap-4 w-full md:max-w-2xl md:px-8 md:border-l border-white/5">
+          <div className={cn(
+            "flex-1 flex flex-col gap-2 md:gap-4 w-full md:max-w-2xl md:px-8 md:border-l border-white/5 transition-opacity",
+            player.raisesThisRound >= MAX_RAISES && "opacity-20 pointer-events-none"
+          )}>
             <div className="flex justify-between text-[8px] md:text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
-              <span>Mín: ${minRaise}</span>
+              <span>Mín: ${minRaise.toLocaleString()}</span>
               <span className="text-white">${betAmount.toLocaleString()}</span>
               <span className="hidden sm:inline">All-In: ${maxRaise.toLocaleString()}</span>
             </div>
@@ -116,12 +126,12 @@ export const BettingControls = ({
                {/* Active Range */}
                <div 
                  className="absolute left-0 top-[6px] md:top-[14px] -translate-y-1/2 h-2 bg-red-600 rounded-full" 
-                 style={{ width: `${((betAmount - 0) / (maxRaise - 0)) * 100}%` }}
+                 style={{ width: `${((betAmount - minRaise) / Math.max(1, maxRaise - minRaise)) * 100}%` }}
                />
                {/* Native Slider Input */}
                <input 
                  type="range"
-                 min={0}
+                 min={minRaise}
                  max={maxRaise}
                  step={10}
                  value={betAmount}
@@ -131,7 +141,7 @@ export const BettingControls = ({
                {/* Custom Handle */}
                <div 
                  className="absolute w-5 h-5 md:w-6 md:h-6 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.4)] border-2 border-red-600 pointer-events-none transition-transform group-hover:scale-110"
-                 style={{ left: `calc(${((betAmount - 0) / (maxRaise - 0)) * 100}% - 10px)` }}
+                 style={{ left: `calc(${((betAmount - minRaise) / Math.max(1, maxRaise - minRaise)) * 100}% - 10px)` }}
                />
             </div>
           </div>
