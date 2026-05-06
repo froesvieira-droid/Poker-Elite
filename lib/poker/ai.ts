@@ -60,7 +60,7 @@ export function getAiAction(state: GameState, playerIdx: number, difficulty: Dif
   const canCheck = amountToCall === 0;
 
   // BLUFF logic
-  if (rand < bluffFreq && state.stage !== GameStage.River && player.raisesThisRound < MAX_RAISES) {
+  if (rand < bluffFreq && state.stage !== GameStage.Street5 && player.raisesThisRound < MAX_RAISES) {
      return { type: 'raise', amount: state.currentBet + 100 };
   }
 

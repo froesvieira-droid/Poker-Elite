@@ -127,3 +127,19 @@ const evaluateFiveCards = (cards: Card[]): HandEvaluation => {
 
   return { rank, score, cards: sorted };
 };
+
+export const getHandRankName = (rank: HandRank): string => {
+  const names: { [key: number]: string } = {
+    [HandRank.HighCard]: 'CARTA ALTA',
+    [HandRank.Pair]: 'UM PAR',
+    [HandRank.TwoPair]: 'DOIS PARES',
+    [HandRank.ThreeOfAKind]: 'TRINCA',
+    [HandRank.Straight]: 'SEQUÊNCIA',
+    [HandRank.Flush]: 'FLUSH',
+    [HandRank.FullHouse]: 'FULL HOUSE',
+    [HandRank.FourOfAKind]: 'QUADRA',
+    [HandRank.StraightFlush]: 'STRAIGHT FLUSH',
+    [HandRank.RoyalFlush]: 'ROYAL FLUSH'
+  };
+  return names[rank] || 'MÃO';
+};

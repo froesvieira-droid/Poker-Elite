@@ -1,17 +1,18 @@
 import { Card, CardRank, GameStage, GameState, Player, PlayerStatus, Suit } from "./types";
 import { createDeck, shuffleDeck, evaluateHand } from "./utils";
 
-export const MAX_RAISES = 2;
+export const MAX_RAISES = 3;
+export const FIXED_RAISE = 20;
 
 export function createInitialState(players: Player[]): GameState {
   return {
-    players: players.map(p => ({ ...p, status: PlayerStatus.Playing, bet: 0, cards: [], raisesThisRound: 0 })),
+    players: players.map(p => ({ ...p, status: PlayerStatus.Playing, bet: 0, chips: 1000, cards: [], raisesThisRound: 0 })),
     pot: 0,
     communityCards: [],
     stage: GameStage.PreFlop,
     currentBet: 0,
     actingIndex: 0,
-    dealerIndex: -1, // Will be incremented on startHand
+    dealerIndex: -1, 
     deck: [],
   };
 }
@@ -23,8 +24,8 @@ export function startHand(state: GameState): GameState {
   // Blinds
   const sbIndex = (nextDealer + 1) % state.players.length;
   const bbIndex = (nextDealer + 2) % state.players.length;
-  const sbAmount = 10;
-  const bbAmount = 20;
+  const sbAmount = FIXED_RAISE / 2;
+  const bbAmount = FIXED_RAISE;
 
   const players = state.players.map((p, i) => {
     let bet = 0;
@@ -77,23 +78,24 @@ export function processAction(state: GameState, action: { type: string; amount?:
      player.bet += actualCall;
      newState.pot += actualCall;
   } else if (action.type === 'raise') {
-     if (player.raisesThisRound >= MAX_RAISES) {
-       // Force a call if max raises reached
-       const callAmount = newState.currentBet - player.bet;
-       const actualCall = Math.min(player.chips, callAmount);
-       player.chips -= actualCall;
-       player.bet += actualCall;
-       newState.pot += actualCall;
-     } else {
-       const totalBet = (action.amount || 0);
-       const raiseAmount = totalBet - player.bet;
-       const actualRaise = Math.min(player.chips, raiseAmount);
-       player.chips -= actualRaise;
-       player.bet += actualRaise;
-       newState.pot += actualRaise;
-       newState.currentBet = player.bet;
-       player.raisesThisRound += 1;
-     }
+      if (player.raisesThisRound >= MAX_RAISES) {
+        // Force a call if max raises reached
+        const callAmount = newState.currentBet - player.bet;
+        const actualCall = Math.min(player.chips, callAmount);
+        player.chips -= actualCall;
+        player.bet += actualCall;
+        newState.pot += actualCall;
+      } else {
+        // FIXED LIMIT: Raise is exactly the current bet + FIXED_RAISE
+        const totalBet = newState.currentBet + FIXED_RAISE;
+        const raiseRequired = totalBet - player.bet;
+        const actualRaise = Math.min(player.chips, raiseRequired);
+        player.chips -= actualRaise;
+        player.bet += actualRaise;
+        newState.pot += actualRaise;
+        newState.currentBet = player.bet;
+        player.raisesThisRound += 1;
+      }
   }
 
   // Check if round is over
@@ -139,15 +141,21 @@ function advanceStage(state: GameState): GameState {
   }
 
   if (newState.stage === GameStage.PreFlop) {
-    newState.stage = GameStage.Flop;
-    newState.communityCards = [newState.deck.pop()!, newState.deck.pop()!, newState.deck.pop()!];
-  } else if (newState.stage === GameStage.Flop) {
-    newState.stage = GameStage.Turn;
+    newState.stage = GameStage.Street1;
+    newState.communityCards = [newState.deck.pop()!];
+  } else if (newState.stage === GameStage.Street1) {
+    newState.stage = GameStage.Street2;
     newState.communityCards.push(newState.deck.pop()!);
-  } else if (newState.stage === GameStage.Turn) {
-    newState.stage = GameStage.River;
+  } else if (newState.stage === GameStage.Street2) {
+    newState.stage = GameStage.Street3;
     newState.communityCards.push(newState.deck.pop()!);
-  } else if (newState.stage === GameStage.River) {
+  } else if (newState.stage === GameStage.Street3) {
+    newState.stage = GameStage.Street4;
+    newState.communityCards.push(newState.deck.pop()!);
+  } else if (newState.stage === GameStage.Street4) {
+    newState.stage = GameStage.Street5;
+    newState.communityCards.push(newState.deck.pop()!);
+  } else if (newState.stage === GameStage.Street5) {
     return determineWinner(newState);
   }
 

@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { GameState, GameStage, Player, PlayerStatus } from '@/lib/poker/types';
 import { createInitialState, startHand, processAction } from '@/lib/poker/engine';
 import { getAiAction, Difficulty } from '@/lib/poker/ai';
+import { getRankLabel, evaluateHand } from '@/lib/poker/utils';
 import { PokerTable } from '@/components/poker/PokerTable';
 import { BettingControls } from '@/components/poker/BettingControls';
 import { motion, AnimatePresence } from 'motion/react';
@@ -65,6 +66,12 @@ export default function OfflinePlayPage() {
     const nextState = processAction(gameState, action);
     setGameState(nextState);
   }, [gameState]);
+
+  const hero = gameState?.players.find(p => p.id === 'hero');
+  const heroBestHand = hero && gameState 
+    ? evaluateHand([...hero.cards, ...gameState.communityCards]) 
+    : null;
+  const highlightedCards = heroBestHand?.cards || [];
 
   const newHand = () => {
     if (!gameState) return;
@@ -215,7 +222,11 @@ export default function OfflinePlayPage() {
         {/* Center: The Table */}
         <div className="flex-1 relative flex items-center justify-center p-2 sm:p-10 bg-brand-surface overflow-hidden">
            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(239,68,68,0.03)_0%,transparent_50%)] pointer-events-none" />
-           <PokerTable state={gameState} currentPlayerId="hero" />
+           <PokerTable 
+             state={gameState} 
+             currentPlayerId="hero" 
+             highlightedCards={highlightedCards}
+           />
         </div>
 
         {/* Right Sidebar */}
@@ -249,7 +260,12 @@ export default function OfflinePlayPage() {
         </aside>
       </div>
 
-      <BettingControls state={gameState} onAction={handleAction} playerId="hero" />
+      <BettingControls 
+        state={gameState} 
+        onAction={handleAction} 
+        playerId="hero" 
+        highlightedCards={highlightedCards}
+      />
 
       {/* Settings Modal */}
       <AnimatePresence>

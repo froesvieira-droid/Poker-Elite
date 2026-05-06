@@ -57,9 +57,11 @@ export interface Player {
 
 export enum GameStage {
   PreFlop = 'preflop',
-  Flop = 'flop',
-  Turn = 'turn',
-  River = 'river',
+  Street1 = 'street1',
+  Street2 = 'street2',
+  Street3 = 'street3',
+  Street4 = 'street4',
+  Street5 = 'street5',
   Showdown = 'showdown'
 }
 
